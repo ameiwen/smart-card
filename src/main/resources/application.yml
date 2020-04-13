@@ -1,0 +1,7 @@
+spring:
+  # 运行环境 dev:开发环境|prod:生产环境
+  profiles:
+    active: @activatedProperties@
+
+server:
+  port: 9001

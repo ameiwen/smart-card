@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zx.card.system.dao.TaskMapper" >
+  <resultMap id="BaseResultMap" type="com.zx.card.system.model.Task" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="job_name" property="jobName" jdbcType="VARCHAR" />
+    <result column="bean_class" property="beanClass" jdbcType="VARCHAR" />
+    <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR" />
+    <result column="job_status" property="jobStatus" jdbcType="VARCHAR" />
+    <result column="job_group" property="jobGroup" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, job_name, bean_class, cron_expression, job_status, job_group, description, update_time, 
+    create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zx.card.system.model.Task" >
+    insert into sys_task (id, job_name, bean_class, 
+      cron_expression, job_status, job_group, 
+      description, update_time, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{jobName,jdbcType=VARCHAR}, #{beanClass,jdbcType=VARCHAR}, 
+      #{cronExpression,jdbcType=VARCHAR}, #{jobStatus,jdbcType=VARCHAR}, #{jobGroup,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zx.card.system.model.Task" >
+    insert into sys_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="jobName != null" >
+        job_name,
+      </if>
+      <if test="beanClass != null" >
+        bean_class,
+      </if>
+      <if test="cronExpression != null" >
+        cron_expression,
+      </if>
+      <if test="jobStatus != null" >
+        job_status,
+      </if>
+      <if test="jobGroup != null" >
+        job_group,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="jobName != null" >
+        #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="beanClass != null" >
+        #{beanClass,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null" >
+        #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null" >
+        #{jobStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zx.card.system.model.Task" >
+    update sys_task
+    <set >
+      <if test="jobName != null" >
+        job_name = #{jobName,jdbcType=VARCHAR},
+      </if>
+      <if test="beanClass != null" >
+        bean_class = #{beanClass,jdbcType=VARCHAR},
+      </if>
+      <if test="cronExpression != null" >
+        cron_expression = #{cronExpression,jdbcType=VARCHAR},
+      </if>
+      <if test="jobStatus != null" >
+        job_status = #{jobStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="jobGroup != null" >
+        job_group = #{jobGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <sql id="Base_Column_Where">
+    <if test="id != null">
+      and id = #{id,jdbcType=INTEGER}
+    </if>
+    <if test="cronExpression != null">
+      and cron_expression = #{cronExpression,jdbcType=VARCHAR}
+    </if>
+    <if test="description != null">
+      and description = #{description,jdbcType=VARCHAR}
+    </if>
+    <if test="beanClass != null">
+      and bean_class = #{beanClass,jdbcType=VARCHAR}
+    </if>
+    <if test="jobStatus != null">
+      and job_status = #{jobStatus,jdbcType=VARCHAR}
+    </if>
+    <if test="jobGroup != null">
+      and job_group = #{jobGroup,jdbcType=VARCHAR}
+    </if>
+    <if test="jobName != null">
+      and job_name = #{jobName,jdbcType=VARCHAR}
+    </if>
+    <if test="updateTime != null">
+      and update_time = #{updateTime}
+    </if>
+    <if test="createTime != null">
+      and create_time = #{createTime}
+    </if>
+  </sql>
+  <select id="selectTaskListWhere" resultMap="BaseResultMap" parameterType="java.util.Map">
+    select * from sys_task
+    where 1 = 1 <include refid="Base_Column_Where"/>
+  </select>
+
+</mapper>

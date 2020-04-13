@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <form class="layui-form" action="">
+                <div class="layui-col-md7">
+                    <input id="id" name="id" type="hidden" th:value="${menu.id}" />
+                    <input id="parentId" name="parentId" type="hidden" th:value="${pId}" />
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">上级菜单</label>
+                        <div class="layui-input-block">
+                            <input type="text" th:value="${pName}" autocomplete="off" readonly class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单类型</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="type" value="0" title="目录" th:field="*{menu.type}">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i>
+                                <div>目录</div>
+                            </div>
+                            <input type="radio" name="type" value="1" title="菜单" th:field="*{menu.type}">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i>
+                                <div>菜单</div>
+                            </div>
+                            <input type="radio" name="type" value="2" title="按钮" th:field="*{menu.type}">
+                            <div class="layui-unselect layui-form-radio layui-form-radioed">
+                                <i class="layui-anim layui-icon"></i>
+                                <div>按钮</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">菜单名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="name" th:value="${menu.name}" lay-verify="name" autocomplete="off" placeholder="请输入菜单名称" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">链接地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="url" th:value="${menu.url}" autocomplete="off" placeholder="请输入链接地址" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">权限标识</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="perms" th:value="${menu.perms}" lay-verify="perms" autocomplete="off" placeholder="请输入权限标志" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">排序号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="orderNum" th:value="${menu.orderNum}" lay-verify="orderNum" autocomplete="off" placeholder="请输入排序号" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-row">
+                            <div class="layui-col-xs9">
+                                <label class="layui-form-label">图标</label>
+                                <div class="layui-input-block">
+                                    <input type="text" id="icon" name="icon" th:value="${menu.icon}" lay-verify="icon" autocomplete="off" placeholder="例如：fa fa-circle-o" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-col-xs3">
+                                <div style="margin-left: 10px;">
+                                    <button id="ico-btn" class="layui-btn">选择图标</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="edit">立即提交</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','system/menuedit']);
+</script>
+</body>
+</html>
