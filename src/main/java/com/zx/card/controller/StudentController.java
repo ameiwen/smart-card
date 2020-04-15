@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.zx.card.controller.base.BaseController;
 import com.zx.card.enums.DeptEnum;
 import com.zx.card.enums.RoleEnum;
+import com.zx.card.model.Classes;
 import com.zx.card.model.FacultySpecialty;
 import com.zx.card.model.TeacherStudent;
 import com.zx.card.service.ITeacherStudentService;
@@ -77,6 +78,28 @@ public class StudentController extends BaseController {
     @RequiresPermissions("info:student:add")
     public Result remove(Long id) {
         return teacherStudentService.removeTeacherStudent(id);
+    }
+
+    @GetMapping(value = "/edit/{id}")
+    public String edit(@PathVariable(value = "id") Long id, HttpServletRequest request){
+        //院系专业信息（回显）
+        List<FacultySpecialty> faculties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.faculty.getCode(),id);
+        List<FacultySpecialty> specialties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.specialty.getCode(),id);
+        //班级信息
+        List<Classes> classes = teacherStudentService.selectClassesByID(id);
+        //学生信息
+        TeacherStudent teacherStudent = teacherStudentService.selectTeacherStudentById(id);
+        request.setAttribute("faculties",faculties);
+        request.setAttribute("specialties",specialties);
+        request.setAttribute("classes",classes);
+        request.setAttribute("student",teacherStudent);
+        return "info/student/edit";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/update")
+    public Result update(TeacherStudent teacherStudent){
+        return teacherStudentService.updateStudent(teacherStudent);
     }
 
 

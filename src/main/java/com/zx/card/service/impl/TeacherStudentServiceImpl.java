@@ -162,4 +162,107 @@ public class TeacherStudentServiceImpl implements ITeacherStudentService {
         }
         return Result.error("系统错误");
     }
+
+    @Override
+    public TeacherStudent selectTeacherStudentById(Long id) {
+        try {
+            if(id == null || id.intValue() <= 0){
+                return null;
+            }
+            TeacherStudent teacherStudent = teacherStudentDao.selectByPrimaryKey(id);
+            if(teacherStudent == null){
+                return null;
+            }
+            return teacherStudent;
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return null;
+    }
+
+    @Override
+    public List<FacultySpecialty> selectFacultySpecialtyByType(String type, Long id) {
+        try {
+            if(DeptEnum.faculty.getCode().equals(type)){
+                FacultySpecialtyExample example = new FacultySpecialtyExample();
+                example.createCriteria().andTypeEqualTo(DeptEnum.faculty.getCode());
+                List<FacultySpecialty> faculties = facultySpecialtyDao.selectByExample(example);
+                return faculties;
+            }else if(DeptEnum.specialty.getCode().equals(type)){
+                //专业信息
+                if(id == null || id.intValue() <= 0){
+                    return null;
+                }
+                TeacherStudent teacherStudent = teacherStudentDao.selectByPrimaryKey(id);
+                if(teacherStudent == null){
+                    return null;
+                }
+                FacultySpecialtyExample example = new FacultySpecialtyExample();
+                example.createCriteria().andTypeEqualTo(DeptEnum.specialty.getCode())
+                        .andIdEqualTo(teacherStudent.getSpecialtyId());
+                List<FacultySpecialty> specialties = facultySpecialtyDao.selectByExample(example);
+                return specialties;
+            }
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return null;
+    }
+
+    @Override
+    public List<Classes> selectClassesByID(Long id) {
+        try {
+            TeacherStudent teacherStudent = teacherStudentDao.selectByPrimaryKey(id);
+            if(teacherStudent == null){
+                return null;
+            }
+            ClassesExample example = new ClassesExample();
+            example.createCriteria().andSpecialtyIdEqualTo(teacherStudent.getSpecialtyId())
+                    .andFacultyIdEqualTo(teacherStudent.getFacultyId());
+            List<Classes> classes = classesDao.selectByExample(example);
+            return classes;
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return null;
+    }
+
+    @Override
+    public Result updateStudent(TeacherStudent teacherStudent) {
+        try {
+            if(teacherStudent.getId() == null){
+                return Result.error("参数错误");
+            }
+            TeacherStudent teacherStudent1 = teacherStudentDao.selectByPrimaryKey(teacherStudent.getId());
+            if(teacherStudent1 == null){
+                return Result.error("参数错误");
+            }
+            //判断身份证是否合法
+            if(!IdcardUtil.isValidCard(teacherStudent.getIdCard())){
+                return Result.error("身份证不合法");
+            }
+            //判断信息是否存在
+            TeacherStudentExample example = new TeacherStudentExample();
+            example.createCriteria().andIdCardEqualTo(teacherStudent.getIdCard())
+                    .andIdCardNotEqualTo(teacherStudent1.getIdCard());
+            List<TeacherStudent> exits = teacherStudentDao.selectByExample(example);
+            if(exits.size() > 0){
+                return Result.error("当前身份证已被使用");
+            }
+            example.createCriteria().andPhoneEqualTo(teacherStudent.getPhone())
+                    .andPhoneNotEqualTo(teacherStudent1.getPhone());
+            exits = teacherStudentDao.selectByExample(example);
+            if(exits.size() > 0){
+                return Result.error("当前手机号已被使用");
+            }
+            //获取出生年月
+            String birthday = IdcardUtil.getBirth(teacherStudent.getIdCard());
+            teacherStudent.setBirthday(birthday);
+            teacherStudentDao.updateByPrimaryKeySelective(teacherStudent);
+            return Result.ok("操作成功");
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return Result.error("系统错误");
+    }
 }

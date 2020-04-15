@@ -120,12 +120,12 @@ layui.define(function(exports) {
                                 if (data.code == 0) {
                                     studentTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
+                                    layer.close(index); //关闭弹层
                                 } else {
                                     layer.msg(data.msg, {"icon": 2});
                                 }
                             }
                         });
-                        layer.close(index); //关闭弹层
                     });
                     submit.trigger('click');
                 }
@@ -134,9 +134,41 @@ layui.define(function(exports) {
             })
         }
 
-        let edit = function (obj) {
-
-        };
+        let edit = function(obj){
+            layer.open({
+                type: 2,
+                title: '修改学生信息',
+                content: prefix + '/edit/' + obj.data.id,
+                area: ['480px', '620px'],
+                btn: ['确定', '取消'],
+                yes: function(index, layero){
+                    let iframeWindow = window['layui-layer-iframe'+ index]
+                        ,submit = layero.find('iframe').contents().find("#student-edit-submit");
+                    //监听提交
+                    iframeWindow.layui.form.on('submit(student-edit-submit)', function(data){
+                        let field = data.field; //获取提交的字段
+                        //提交 Ajax 成功后，静态更新表格中的数据
+                        $.ajax({
+                            url: prefix + "/update",
+                            data: field,
+                            method: "POST",
+                            success: function (data) {
+                                if (data.code == 0) {
+                                    studentTab.reload();
+                                    layer.msg(data.msg, {"icon": 1});
+                                    layer.close(index); //关闭弹层
+                                } else {
+                                    layer.msg(data.msg, {"icon": 2});
+                                }
+                            }
+                        });
+                    });
+                    submit.trigger('click');
+                }
+                ,success: function(layero, index){
+                }
+            })
+        }
 
         //删除用户
         let remove = function (obj) {

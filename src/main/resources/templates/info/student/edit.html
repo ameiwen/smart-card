@@ -10,45 +10,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
     <link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+    <style>
+        .layui-form-select dl { max-height:300px; }
+    </style>
 </head>
 <body>
-<div class="layui-form" lay-filter="order-edit-form" id="order-edit-form" style="padding: 20px 30px 0 0;">
-    <input id="id" name="id" th:value="${order.id}" type="hidden">
+<div class="layui-form" lay-filter="order-edit-form" id="order-add-form" style="padding: 20px 30px 0 0;">
+    <input type="hidden" id="id" name="id" th:value="${student.id}">
     <div class="layui-form-item">
-        <label class="layui-form-label"></label>
+        <label class="layui-form-label">所属院系</label>
         <div class="layui-input-block">
-            <input class="layui-input" th:value="${order.upuptzcommission}" type="text" name="upuptzcommission" lay-verify="required" autocomplete="off"/>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label"></label>
-        <div class="layui-input-block">
-            <input class="layui-input" th:value="${order.goodscatename}" type="text" name="goodscatename" lay-verify="required" autocomplete="off"/>
-        </div>
-    </div>
-    <!-- 单选框
-    <div class="layui-form-item">
-        <label class="layui-form-label">状态</label>
-        <div class="layui-input-block">
-            <select name="status">
-                <option value="0" th:field="*{user.status}">禁用</option>
-                <option value="1" th:field="*{user.status}">正常</option>
+            <select id="facultyId" name="facultyId" lay-filter="facultyId">
+                <option value="">请先择院系</option>
+                <th:block th:each="item:${faculties}">
+                    <option th:value="${item.id}" th:selected="${item.id == student.facultyId}" th:text="${item.name}"></option>
+                </th:block>
             </select>
         </div>
     </div>
-    -->
-    <!--复选框
     <div class="layui-form-item">
-        <label class="layui-form-label">角色</label>
+        <label class="layui-form-label">所属专业</label>
         <div class="layui-input-block">
-            <th:block th:each="role:${roles}">
-                <input type="checkbox" name="role" th:value="${role.id}" lay-skin="primary" th:title="${role.name}" th:checked="${role.sign}">
-            </th:block>
+            <select id="specialtyId" name="specialtyId" lay-filter="specialtyId">
+                <option value="">请先择专业</option>
+                <th:block th:each="item:${specialties}">
+                    <option th:value="${item.id}" th:selected="${item.id == student.specialtyId}" th:text="${item.name}"></option>
+                </th:block>
+            </select>
         </div>
     </div>
-    -->
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属班级</label>
+        <div class="layui-input-block">
+            <select id="classId" name="classId" lay-filter="classId">
+                <option value="">请先择班级</option>
+                <th:block th:each="item:${classes}">
+                    <option th:value="${item.id}" th:selected="${item.id == student.classId}" th:text="${item.name}"></option>
+                </th:block>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input class="layui-input" type="text" th:value="${student.name}" name="name" lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input type="radio" th:checked="${student.sex == '1'}" name="sex" value="1" title="男" checked="">
+            <input type="radio" th:checked="${student.sex == '2'}" name="sex" value="2" title="女">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">入学年份</label>
+        <div class="layui-input-block">
+            <input class="layui-input" th:value="${student.year}" type="text" name="year" lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">电话号码</label>
+        <div class="layui-input-block">
+            <input class="layui-input" type="text" th:value="${student.phone}" name="phone" lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">身份证号码</label>
+        <div class="layui-input-block">
+            <input class="layui-input" type="text" th:value="${student.idCard}" name="idCard" lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
     <div class="layui-form-item layui-hide">
-        <button class="layui-btn" lay-submit lay-filter="order-edit-submit" id="order-edit-submit">提交</button>
+        <button class="layui-btn" lay-submit lay-filter="student-edit-submit" id="student-edit-submit">提交</button>
     </div>
 </div>
 <script th:src="@{/layuiadmin/layui/layui.js}"></script>
@@ -57,10 +91,7 @@
         base: '/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['index', 'form'], function(){
-        var $ = layui.$
-            ,form = layui.form ;
-    })
+    }).use(['index','info/studentedit']);
 </script>
 </body>
 </html>

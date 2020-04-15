@@ -65,5 +65,5 @@ layui.define(function(exports) {
 
     });
 
-    exports('studentadd', {})
+    exports('studentedit', {})
 });

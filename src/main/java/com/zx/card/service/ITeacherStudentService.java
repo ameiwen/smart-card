@@ -23,4 +23,12 @@ public interface ITeacherStudentService {
 
     Result saveTeacherStudent(TeacherStudent teacherStudent);
 
+    TeacherStudent selectTeacherStudentById(Long ID);
+
+    List<FacultySpecialty> selectFacultySpecialtyByType(String type,Long id);
+
+    List<Classes> selectClassesByID(Long id);
+
+    Result updateStudent(TeacherStudent teacherStudent);
+
 }
