@@ -5,7 +5,7 @@ layui.define(function(exports) {
      *  下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
      */
 
-    let prefix = "/info/student";
+    let prefix = "/info/faculty";
 
     //渲染表格
     layui.use(['table', 'layer', 'jquery', 'form'], function () {
@@ -15,8 +15,8 @@ layui.define(function(exports) {
             form = layui.form;
 
         //渲染表格
-        let studentTab = table.render({
-            elem: '#studentTab',
+        let facultyTab = table.render({
+            elem: '#facultyTab',
             url: prefix + '/list',
             page: true, //开启分页
             parseData: function (res) { //res 即为原始返回的数据
@@ -32,31 +32,8 @@ layui.define(function(exports) {
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
             cols: [[
-                    {field: 'id', title: '学号', align: 'center'},
+                    {field: 'id', title: '编号', align: 'center'},
                     {field: 'name', title: '姓名', align: 'center'},
-                    {field: 'sex', title: '性别', align: 'center'},
-                    {field: 'year', title: '级', align: 'center'},
-                    {field: 'className', title: '班', align: 'center'},
-                    {
-                        title: '院系', align: 'center',templet: function (d) {
-                            let name = d.faculty.name;
-                            if(name != null){
-                                return name;
-                            }else{
-                                return "--";
-                            }
-                        }
-                    },
-                    {
-                        title: '专业', align: 'center',templet: function (d) {
-                            let name = d.specialty.name;
-                            if(name != null){
-                                return name;
-                            }else{
-                                return "--";
-                            }
-                        }
-                    },
                     {
                         title: '状态', align: 'center',templet: function (d) {
                             if(d.status == 1){
@@ -74,7 +51,7 @@ layui.define(function(exports) {
 
         //搜索
         form.on('submit(search)', function (data) {
-            studentTab.reload({
+            facultyTab.reload({
                 where: data.field,//设置查询参数
                 page: {
                     curr: 1 //重新从第 1 页开始
@@ -84,7 +61,7 @@ layui.define(function(exports) {
         });
 
         //监听工具条(删除)
-        table.on('tool(studentTab)', function (obj) {
+        table.on('tool(facultyTab)', function (obj) {
             var layEvent = obj.event;
             if (layEvent === 'remove') {
                 remove(obj)
@@ -94,22 +71,22 @@ layui.define(function(exports) {
         });
 
         //新增顶级菜单点击
-        $("body").on("click", "#studentBtn", function () {
+        $("body").on("click", "#facultyBtn", function () {
             add();
         })
 
         let add = function(obj){
             layer.open({
                 type: 2,
-                title: '添加学生信息',
+                title: '添加院系信息',
                 content: prefix + '/add',
-                area: ['480px', '620px'],
+                area: ['480px', '200px'],
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     var iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#student-add-submit");
+                        ,submit = layero.find('iframe').contents().find("#specialty-add-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(student-add-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(specialty-add-submit)', function(data){
                         var field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -118,7 +95,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    studentTab.reload();
+                                    facultyTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -132,20 +109,20 @@ layui.define(function(exports) {
                 ,success: function(layero, index){
                 }
             })
-        }
+        };
 
         let edit = function(obj){
             layer.open({
                 type: 2,
-                title: '修改学生信息',
+                title: '修改院系信息',
                 content: prefix + '/edit/' + obj.data.id,
-                area: ['480px', '620px'],
+                area: ['480px', '200px'],
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     let iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#student-edit-submit");
+                        ,submit = layero.find('iframe').contents().find("#specialty-edit-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(student-edit-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(specialty-edit-submit)', function(data){
                         let field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -154,7 +131,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    studentTab.reload();
+                                    facultyTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -170,26 +147,7 @@ layui.define(function(exports) {
             })
         }
 
-        //删除用户
-        let remove = function (obj) {
-            layer.confirm('确定删除此学生？', function (index) {
-                $.ajax({
-                    url: prefix + '/remove',
-                    method: "POST",
-                    data: {"id": obj.data.id},
-                    success: function (data) {
-                        if (data.code == 0) {
-                            studentTab.reload();
-                        } else {
-                            layer.msg(data.msg, {"icon": 2});
-                        }
-                    }
-                });
-                layer.close(index);
-            });
-        };
-
     });
 
-    exports('orderlist', {})
+    exports('facultylist', {})
 });

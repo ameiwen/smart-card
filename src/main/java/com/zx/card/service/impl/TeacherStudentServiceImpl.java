@@ -190,16 +190,12 @@ public class TeacherStudentServiceImpl implements ITeacherStudentService {
                 return faculties;
             }else if(DeptEnum.specialty.getCode().equals(type)){
                 //专业信息
-                if(id == null || id.intValue() <= 0){
-                    return null;
-                }
-                TeacherStudent teacherStudent = teacherStudentDao.selectByPrimaryKey(id);
-                if(teacherStudent == null){
-                    return null;
-                }
                 FacultySpecialtyExample example = new FacultySpecialtyExample();
-                example.createCriteria().andTypeEqualTo(DeptEnum.specialty.getCode())
-                        .andIdEqualTo(teacherStudent.getSpecialtyId());
+                FacultySpecialtyExample.Criteria criteria = example.createCriteria();
+                criteria.andTypeEqualTo(DeptEnum.specialty.getCode());
+                if(id > 0) {
+                    criteria.andParentIdEqualTo(id);
+                }
                 List<FacultySpecialty> specialties = facultySpecialtyDao.selectByExample(example);
                 return specialties;
             }

@@ -27,7 +27,7 @@ public class StudentController extends BaseController {
 
     @GetMapping
     @RequiresPermissions(value = "info:student:student")
-    public String order() {
+    public String student() {
         return  "info/student/student";
     }
 
@@ -82,13 +82,13 @@ public class StudentController extends BaseController {
 
     @GetMapping(value = "/edit/{id}")
     public String edit(@PathVariable(value = "id") Long id, HttpServletRequest request){
-        //院系专业信息（回显）
-        List<FacultySpecialty> faculties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.faculty.getCode(),id);
-        List<FacultySpecialty> specialties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.specialty.getCode(),id);
-        //班级信息
-        List<Classes> classes = teacherStudentService.selectClassesByID(id);
         //学生信息
         TeacherStudent teacherStudent = teacherStudentService.selectTeacherStudentById(id);
+        //院系专业信息（回显）
+        List<FacultySpecialty> faculties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.faculty.getCode(),id);
+        List<FacultySpecialty> specialties = teacherStudentService.selectFacultySpecialtyByType(DeptEnum.specialty.getCode(),teacherStudent.getFacultyId());
+        //班级信息
+        List<Classes> classes = teacherStudentService.selectClassesByID(id);
         request.setAttribute("faculties",faculties);
         request.setAttribute("specialties",specialties);
         request.setAttribute("classes",classes);
