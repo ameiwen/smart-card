@@ -39,7 +39,8 @@ mybatis:
     #实体类所做包
     type-aliases-package: com.zx.card.*.model
     #打印SQL语句
-#    configuration:
+    configuration:
+         map-underscore-to-camel-case: true
 #        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #分页插件
 pagehelper:

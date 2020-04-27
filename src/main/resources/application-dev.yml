@@ -31,8 +31,6 @@ spring:
         # 合并多个DruidDataSource的监控数据
         useGlobalDataSourceStat: true
 mybatis:
-    #    configuration:
-    #    map-underscore-to-camel-case: true
     #mapper.xml所在位置
     mapperLocations: classpath:mapper/**/*Mapper.xml
     #实体类所做包
@@ -40,6 +38,7 @@ mybatis:
 #    #打印SQL语句
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        map-underscore-to-camel-case: true
 #分页插件
 pagehelper:
     # oracle

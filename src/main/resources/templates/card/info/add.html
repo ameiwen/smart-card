@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+    <style>
+        .layui-form-select dl { max-height:300px; }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">学生</li>
+                    <li>教师</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">学生编号</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="number" id="student" name="userId" lay-verify="required" autocomplete="off"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">
+                                    <span style="color: red" id="studentError">tips:编号应该是刷卡自动识别，这里手动输入用作演示</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">学生姓名</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="text" id="studentUserName" name="userName" disabled lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">所属院系</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="text" id="faculty" disabled lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">所属专业</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="text" id="specialty" disabled lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开卡金额</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="20" name="assetAmount" type="number" lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">消费日限额</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="1000" type="number" lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="123456" type="password" name="password" lay-verify="required" autocomplete="off"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">请填写6到12位密码(默认密码：123456)</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <a class="layui-btn" lay-submit="" lay-filter="saveStudent">立即提交</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">教师编号</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="number" id="teacher" name="userId" lay-verify="required" autocomplete="off"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">
+                                    <span style="color: red" id ="teacherError">tips:编号应该是刷卡自动识别，这里手动输入用作演示</span>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">教师姓名</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" type="text" id="teacherUserName"  name="userName" disabled lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">开卡金额</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="20" name="assetAmount" type="number" lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">消费日限额</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="1000" type="number" lay-verify="required" autocomplete="off"/>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">密码</label>
+                                <div class="layui-input-inline">
+                                    <input class="layui-input" value="123456" type="password" name="password" lay-verify="required" autocomplete="off"/>
+                                </div>
+                                <div class="layui-form-mid layui-word-aux">请填写6到12位密码(默认密码：123456)</div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <a class="layui-btn" lay-submit="" lay-filter="saveTeacher">立即提交</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','card/infoadd']);
+</script>
+</body>
+</html>

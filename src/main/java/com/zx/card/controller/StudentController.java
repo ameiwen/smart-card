@@ -70,6 +70,7 @@ public class StudentController extends BaseController {
     @PostMapping(value = "/save")
     @RequiresPermissions("info:student:add")
     public Result save(TeacherStudent teacherStudent) {
+        teacherStudent.setRole(RoleEnum.student.getCode());
         return teacherStudentService.saveTeacherStudent(teacherStudent);
     }
 
