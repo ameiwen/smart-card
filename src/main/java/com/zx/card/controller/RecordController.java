@@ -2,7 +2,6 @@ package com.zx.card.controller;
 
 import com.github.pagehelper.Page;
 import com.zx.card.model.AssetHistory;
-import com.zx.card.model.CardInfo;
 import com.zx.card.service.IRecordService;
 import com.zx.card.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;

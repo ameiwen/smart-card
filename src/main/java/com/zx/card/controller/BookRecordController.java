@@ -1,7 +1,6 @@
 package com.zx.card.controller;
 
 import com.github.pagehelper.Page;
-import com.zx.card.model.BookType;
 import com.zx.card.model.BorrowRecord;
 import com.zx.card.service.IBookRecordService;
 import com.zx.card.utils.Result;
