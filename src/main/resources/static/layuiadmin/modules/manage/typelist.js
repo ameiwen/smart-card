@@ -5,7 +5,7 @@ layui.define(function(exports) {
      *  下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
      */
 
-    let prefix = "/info/faculty";
+    let prefix = "/manage/type";
 
     //渲染表格
     layui.use(['table', 'layer', 'jquery', 'form'], function () {
@@ -15,8 +15,8 @@ layui.define(function(exports) {
             form = layui.form;
 
         //渲染表格
-        let facultyTab = table.render({
-            elem: '#facultyTab',
+        let typeTab = table.render({
+            elem: '#typeTab',
             url: prefix + '/list',
             page: true, //开启分页
             parseData: function (res) { //res 即为原始返回的数据
@@ -33,7 +33,7 @@ layui.define(function(exports) {
             },
             cols: [[
                     {field: 'id', title: '编号', align: 'center'},
-                    {field: 'name', title: '姓名', align: 'center'},
+                    {field: 'typeName', title: '姓名', align: 'center'},
                     {
                         title: '状态', align: 'center',templet: function (d) {
                             if(d.status == 1){
@@ -51,7 +51,7 @@ layui.define(function(exports) {
 
         //搜索
         form.on('submit(search)', function (data) {
-            facultyTab.reload({
+            typeTab.reload({
                 where: data.field,//设置查询参数
                 page: {
                     curr: 1 //重新从第 1 页开始
@@ -61,7 +61,7 @@ layui.define(function(exports) {
         });
 
         //监听工具条(删除)
-        table.on('tool(facultyTab)', function (obj) {
+        table.on('tool(typeTab)', function (obj) {
             var layEvent = obj.event;
             if (layEvent === 'remove') {
                 remove(obj)
@@ -71,7 +71,7 @@ layui.define(function(exports) {
         });
 
         //新增顶级菜单点击
-        $("body").on("click", "#facultyBtn", function () {
+        $("body").on("click", "#typeBtn", function () {
             add();
         })
 
@@ -84,9 +84,9 @@ layui.define(function(exports) {
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     var iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#faculty-add-submit");
+                        ,submit = layero.find('iframe').contents().find("#type-add-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(faculty-add-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(type-add-submit)', function(data){
                         var field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -95,7 +95,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    facultyTab.reload();
+                                    typeTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -114,15 +114,15 @@ layui.define(function(exports) {
         let edit = function(obj){
             layer.open({
                 type: 2,
-                title: '修改院系信息',
+                title: '修改书籍信息',
                 content: prefix + '/edit/' + obj.data.id,
                 area: ['480px', '200px'],
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     let iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#specialty-edit-submit");
+                        ,submit = layero.find('iframe').contents().find("#type-edit-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(specialty-edit-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(type-edit-submit)', function(data){
                         let field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -131,7 +131,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    facultyTab.reload();
+                                    typeTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -149,5 +149,5 @@ layui.define(function(exports) {
 
     });
 
-    exports('facultylist', {})
+    exports('typelist', {})
 });

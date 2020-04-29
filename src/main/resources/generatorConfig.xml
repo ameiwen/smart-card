@@ -38,7 +38,7 @@
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 		<!-- targetPackage:放置生成的SQL映射文件 -->
-		<sqlMapGenerator targetPackage="card"
+		<sqlMapGenerator targetPackage="manage"
 			targetProject="src/main/resources/mapper">
 			<property name="enableSubPackages" value="false" /> <!-- enableSubPackages:是否让schema作为包的后缀 -->
 		</sqlMapGenerator>
@@ -47,7 +47,7 @@
 			targetProject="src/main/java" type="XMLMAPPER">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
-        <table  tableName="sc_card_info" domainObjectName="CardInfo">
+        <table  tableName="sc_borrow_record" domainObjectName="BorrowRecord">
 			<!-- 指定列的java数据类型 -->
 			<generatedKey column="id" sqlStatement="MySql" identity="true"/>
 		</table>

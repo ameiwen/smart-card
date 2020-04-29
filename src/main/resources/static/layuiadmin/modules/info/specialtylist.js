@@ -82,9 +82,9 @@ layui.define(function(exports) {
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     var iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#faculty-add-submit");
+                        ,submit = layero.find('iframe').contents().find("#specialty-add-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(faculty-add-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(specialty-add-submit)', function(data){
                         var field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({

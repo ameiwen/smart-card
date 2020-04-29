@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" th:href="@{/layuiadmin/layui/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/layuiadmin/style/admin.css}" media="all">
+    <style>
+        .layui-form-select dl { max-height:300px; }
+    </style>
+</head>
+<body>
+<div class="layui-form" lay-filter="record-add-form" id="record-add-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">书籍编号</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="number" id="bookId" name="bookId" lay-verify="required" autocomplete="off"/>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            <span style="color: red" id="bookError">tips:自动识别，仅作演示</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">书籍名称</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" id="name" disabled lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">出版社</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" id="publishName" disabled lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">卡片</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="number" id="cardId" name="cardId" lay-verify="required" autocomplete="off"/>
+        </div>
+        <div class="layui-form-mid layui-word-aux">
+            <span style="color: red" id="cardError">tips:自动识别，仅作演示</span>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" id="username" disabled lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">借书额度</label>
+        <div class="layui-input-inline">
+            <input class="layui-input" type="text" id="borrowNum" disabled lay-verify="required" autocomplete="off"/>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <button class="layui-btn" lay-submit lay-filter="record-add-submit" id="record-add-submit">提交</button>
+    </div>
+</div>
+<script th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form ;
+
+        $("#bookId").change(function () {
+            let bookId = $("#bookId").val();
+            $.ajax({
+                url: "/manage/record/bookInfo/" +bookId,
+                method:'POST',
+                success:function (data) {
+                    if(data.code == 0){
+                        $("#name").val(data.book.name);
+                        $("#publishName").val(data.book.publishName);
+                        $("#bookError").text("");
+                    }else{
+                        $("#bookError").text(data.msg);
+                    }
+                }
+            })
+        })
+
+        $("#cardId").change(function () {
+            let cardId = $("#cardId").val();
+            $.ajax({
+                url: "/manage/record/cardInfo/" +cardId,
+                method:'POST',
+                success:function (data) {
+                    if(data.code == 0){
+                        $("#username").val(data.cardInfo.userName);
+                        $("#borrowNum").val(data.cardInfo.borrowNum);
+                        $("#cardError").text("");
+                    }else{
+                        $("#cardError").text(data.msg);
+                    }
+                }
+            })
+        })
+
+    })
+</script>
+</body>
+</html>

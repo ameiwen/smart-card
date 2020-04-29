@@ -5,7 +5,7 @@ layui.define(function(exports) {
      *  下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
      */
 
-    let prefix = "/info/faculty";
+    let prefix = "/manage/book";
 
     //渲染表格
     layui.use(['table', 'layer', 'jquery', 'form'], function () {
@@ -15,8 +15,8 @@ layui.define(function(exports) {
             form = layui.form;
 
         //渲染表格
-        let facultyTab = table.render({
-            elem: '#facultyTab',
+        let bookTab = table.render({
+            elem: '#bookTab',
             url: prefix + '/list',
             page: true, //开启分页
             parseData: function (res) { //res 即为原始返回的数据
@@ -32,26 +32,29 @@ layui.define(function(exports) {
                 limitName: 'pageSize' //每页数据量的参数名，默认：limit
             },
             cols: [[
-                    {field: 'id', title: '编号', align: 'center'},
-                    {field: 'name', title: '姓名', align: 'center'},
-                    {
-                        title: '状态', align: 'center',templet: function (d) {
-                            if(d.status == 1){
-                                return "<span class='layui-badge layui-bg-green'>正常</span>"
-                            }
-                            if(d.status == 0){
-                                return "<del class='layui-badge'>已删除</del>"
-                            }
-                        }
-                    },
-                    {field: 'createTime', title: '创建时间',templet:'<div>{{layui.util.toDateString(d.createTime,"yyyy-MM-dd HH:mm:ss")}}</div>'},
-                    {templet: '#tool', title: '操作',width:150, align: 'center'}
+               {field: 'id', title: '书籍编号', align: 'center'},
+               {field: 'name', title: '书名', align: 'center'},
+               {field: 'author', title: '作者', align: 'center'},
+               {field: 'typeName', title: '类型名称', align: 'center'},
+               {field: 'publishName', title: '出版社', align: 'center'},
+               {
+                       title: '状态', align: 'center',templet: function (d) {
+                           if(d.status == 1){
+                               return "<span class='layui-badge layui-bg-green'>正常</span>"
+                           }
+                           if(d.status == 0){
+                               return "<span class='layui-badge'>已删除</span>"
+                           }
+                       }
+               },
+               {field: 'createTime', title: '创建时间',templet:'<div>{{layui.util.toDateString(d.createTime,"yyyy-MM-dd HH:mm:ss")}}</div>'},
+               {templet: '#tool', title: '操作',width:150, align: 'center'}
             ]]
         });
 
         //搜索
         form.on('submit(search)', function (data) {
-            facultyTab.reload({
+            bookTab.reload({
                 where: data.field,//设置查询参数
                 page: {
                     curr: 1 //重新从第 1 页开始
@@ -61,7 +64,7 @@ layui.define(function(exports) {
         });
 
         //监听工具条(删除)
-        table.on('tool(facultyTab)', function (obj) {
+        table.on('tool(bookTab)', function (obj) {
             var layEvent = obj.event;
             if (layEvent === 'remove') {
                 remove(obj)
@@ -71,22 +74,22 @@ layui.define(function(exports) {
         });
 
         //新增顶级菜单点击
-        $("body").on("click", "#facultyBtn", function () {
+        $("body").on("click", "#bookBtn", function () {
             add();
         })
 
-        let add = function(obj){
+        let add = function(){
             layer.open({
                 type: 2,
-                title: '添加院系信息',
+                title: '添加书籍信息',
                 content: prefix + '/add',
-                area: ['480px', '200px'],
+                area: ['480px', '500px'],
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     var iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#faculty-add-submit");
+                        ,submit = layero.find('iframe').contents().find("#book-add-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(faculty-add-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(book-add-submit)', function(data){
                         var field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -95,7 +98,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    facultyTab.reload();
+                                    bookTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -114,15 +117,15 @@ layui.define(function(exports) {
         let edit = function(obj){
             layer.open({
                 type: 2,
-                title: '修改院系信息',
+                title: '修改书籍信息',
                 content: prefix + '/edit/' + obj.data.id,
-                area: ['480px', '200px'],
+                area: ['480px', '500px'],
                 btn: ['确定', '取消'],
                 yes: function(index, layero){
                     let iframeWindow = window['layui-layer-iframe'+ index]
-                        ,submit = layero.find('iframe').contents().find("#specialty-edit-submit");
+                        ,submit = layero.find('iframe').contents().find("#book-edit-submit");
                     //监听提交
-                    iframeWindow.layui.form.on('submit(specialty-edit-submit)', function(data){
+                    iframeWindow.layui.form.on('submit(book-edit-submit)', function(data){
                         let field = data.field; //获取提交的字段
                         //提交 Ajax 成功后，静态更新表格中的数据
                         $.ajax({
@@ -131,7 +134,7 @@ layui.define(function(exports) {
                             method: "POST",
                             success: function (data) {
                                 if (data.code == 0) {
-                                    facultyTab.reload();
+                                    bookTab.reload();
                                     layer.msg(data.msg, {"icon": 1});
                                     layer.close(index); //关闭弹层
                                 } else {
@@ -147,7 +150,26 @@ layui.define(function(exports) {
             })
         }
 
+        //删除用户
+        let remove = function (obj) {
+            layer.confirm('确定删除书籍吗？', function (index) {
+                $.ajax({
+                    url: prefix + '/remove',
+                    method: "POST",
+                    data: {"id": obj.data.id},
+                    success: function (data) {
+                        if (data.code == 0) {
+                            bookTab.reload();
+                        } else {
+                            layer.msg(data.msg, {"icon": 2});
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+        };
+
     });
 
-    exports('facultylist', {})
+    exports('booklist', {})
 });
