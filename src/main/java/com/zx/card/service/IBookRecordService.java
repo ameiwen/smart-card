@@ -14,4 +14,6 @@ public interface IBookRecordService {
 
     Result saveBorrowRecord(BorrowRecord borrowRecord,String type);
 
+    Result selectBookReport();
+
 }

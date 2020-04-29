@@ -50,4 +50,10 @@ public class BookRecordController {
         return bookRecordService.saveBorrowRecord(borrowRecord,type);
     }
 
+    @ResponseBody
+    @PostMapping(value = "/report")
+    public Result report(){
+        return bookRecordService.selectBookReport();
+    }
+
 }

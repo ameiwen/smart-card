@@ -4,15 +4,15 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zx.card.dao.BookDao;
+import com.zx.card.dao.BookTypeDao;
 import com.zx.card.dao.BorrowRecordDao;
 import com.zx.card.dao.CardInfoDao;
 import com.zx.card.enums.BookEnum;
 import com.zx.card.enums.EventEnums;
-import com.zx.card.model.Book;
-import com.zx.card.model.BorrowRecord;
-import com.zx.card.model.BorrowRecordExample;
-import com.zx.card.model.CardInfo;
+import com.zx.card.model.*;
+import com.zx.card.model.dto.BookReDO;
 import com.zx.card.service.IBookRecordService;
+import com.zx.card.system.model.User;
 import com.zx.card.utils.Result;
 import com.zx.card.utils.ShiroUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookRecordServiceImpl implements IBookRecordService {
@@ -34,6 +36,8 @@ public class BookRecordServiceImpl implements IBookRecordService {
     private CardInfoDao cardInfoDao;
     @Autowired
     private BookDao bookDao;
+    @Autowired
+    private BookTypeDao bookTypeDao;
 
     @Override
     public Result selectBorrowRecordByPage(Page<BorrowRecord> pageInfo, BorrowRecord borrowRecord) {
@@ -98,6 +102,10 @@ public class BookRecordServiceImpl implements IBookRecordService {
             if(cardInfo == null){
                 return Result.error("信息错误");
             }
+            Book book = bookDao.selectByPrimaryKey(borrowRecord.getBookId());
+            if(book == null){
+                return Result.error("信息错误");
+            }
             if(cardInfo.getBorrowNum().intValue() <= 0){
                 return Result.error("借书已达上线");
             }
@@ -110,6 +118,8 @@ public class BookRecordServiceImpl implements IBookRecordService {
                 borrowNum = cardInfo.getBorrowNum() - 1;
             }
             //添加借书记录
+            borrowRecord.setUsername(cardInfo.getUserName());
+            borrowRecord.setTypeId(book.getTypeId());
             borrowRecord.setEventType(eventType);
             borrowRecord.setOptionUser(ShiroUtils.getUser().getName());
             borrowRecordDao.insertSelective(borrowRecord);
@@ -117,6 +127,27 @@ public class BookRecordServiceImpl implements IBookRecordService {
             cardInfo.setBorrowNum(borrowNum);
             cardInfoDao.updateByPrimaryKeySelective(cardInfo);
             return Result.ok("操作成功");
+        }catch (Exception e){
+            logger.error(ExceptionUtils.getStackTrace(e));
+        }
+        return Result.error("操作失败");
+    }
+
+    @Override
+    public Result selectBookReport() {
+        try {
+            List<BookReDO> bookReDOS = borrowRecordDao.selectReportForBookType();
+            List<String> headers = new ArrayList<>();
+            if(bookReDOS == null || bookReDOS.size() <= 0){
+                return Result.error("当前无类型");
+            }
+            bookReDOS.forEach( b ->{
+                headers.add(b.getName());
+            });
+            Result result = Result.ok("");
+            result.put("headers",headers);
+            result.put("data",bookReDOS);
+            return result;
         }catch (Exception e){
             logger.error(ExceptionUtils.getStackTrace(e));
         }
